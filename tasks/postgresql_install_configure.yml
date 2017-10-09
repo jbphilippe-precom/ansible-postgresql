@@ -1,0 +1,24 @@
+---
+# task file for postgresql_install_configure.yml
+- name: "Configuration PostgreSQL"
+  template:
+    src="{{ postgresql_configuration_template }}"
+    dest={{ postgresql_main_configuration_file }}
+    owner=postgres
+    group=postgres
+    mode=0644
+  register: configupload
+  notify: Restart PostgreSQL
+
+- name: "pg_hba for client"
+  lineinfile:
+    dest="/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+    line="host    all             all             %s                 md5"
+  with_items: postgresql_clients_hosts
+  notify: Reload PostgreSQL
+
+- name: "Restart PostgreSQL Master"
+  service:
+    name="postgresql"
+    state=restarted
+  when: configupload|changed and postgresql_cluster_state == "m"

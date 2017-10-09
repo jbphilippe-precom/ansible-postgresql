@@ -1,0 +1,33 @@
+---
+# task file for postgresql_install_secure.yml
+- name: "Install python-psycopg2"
+  apt:
+    name=python-psycopg2
+    update_cache=yes
+  environment:
+       LANG: "{{ postgresql_locale }}"
+       LANGUAGE: en_US
+       LC_CTYPE: "{{ postgresql_locale }}"
+       LC_NUMERIC: "{{ postgresql_locale }}"
+       LC_TIME: "{{ postgresql_locale }}"
+       LC_COLLATE: "{{ postgresql_locale }}"
+       LC_MONETARY: "{{ postgresql_locale }}"
+       LC_MESSAGES: "{{ postgresql_locale }}"
+       LC_PAPER: "{{ postgresql_locale }}"
+       LC_NAME: "{{ postgresql_locale }}"
+       LC_ADDRESS: "{{ postgresql_locale }}"
+       LC_TELEPHONE: "{{ postgresql_locale }}"
+       LC_MEASUREMENT: "{{ postgresql_locale }}"
+       LC_IDENTIFICATION: "{{ postgresql_locale }}"
+       LC_ALL: "{{ postgresql_locale }}"
+
+- name: "Revoke defaults privileges from PUBLIC"
+  become_user: postgres
+  postgresql_privs: >
+    db=postgres
+    state=absent
+    privs=ALL
+    type=database
+    objs=template0,template1,postgres
+    role=PUBLIC
+  when: postgresql_cluster_state != "s"

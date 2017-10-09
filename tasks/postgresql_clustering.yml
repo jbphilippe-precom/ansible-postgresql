@@ -1,0 +1,30 @@
+---
+# tasks file for ansible-postgresql
+- name: "Adding replication user"
+  become_user: postgres
+  postgresql_user:
+    state: present
+    name: "{{ postgresql_replication_user }}"
+    password: "{{ postgresql_replication_password }}"
+    role_attr_flags: REPLICATION
+  when: postgresql_cluster_state == "m"
+
+- name: "Add host(s) IP(s) in pg_hba for replication"
+  lineinfile:
+    dest="/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+    line="host    replication    {{ postgresql_replication_user }}    {{ item }}/32    md5"
+  register: addhost
+  with_items: postgresql_slaves_hosts
+
+- name: "Reload PostgreSQL Master"
+  service:
+    name="postgresql"
+    state=reloaded
+  when: addhost|changed and postgresql_cluster_state == "m"
+
+- name: "Waiting for PostgreSQL listening"
+  wait_for:
+    port={{ postgresql_listen_port }}
+    delay=2
+    timeout=15
+  when: postgresql_cluster_state == "m"

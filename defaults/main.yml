@@ -1,0 +1,32 @@
+---
+# defaults file for ansible-postgresql
+
+## version ##
+postgresql_version: "9.3"
+
+## LVM ##
+postgresql_lvcreate: True
+postgresql_vg_name: "vg_vroot"
+postgresql_lv_name: "lv_postgresql"
+postgresql_lv_size: "5g"
+
+## Variables surchargeables pour le fichier de configuration ##
+## Si non renseignee aucun de soucis ca fonctionne quand meme ##
+postgresql_listen_port: "5432"
+postgresql_listen_addresses: "localhost"
+postgresql_max_connections: "100"
+postgresql_shared_buffers: "128MB"
+postgresql_checkpoint_segments: "3"
+postgresql_effective_cache_size: "128MB"
+
+## Lieu du template ##
+postgresql_configuration_template: "postgresql.conf.tpl"
+postgresql_recovery_template: "recovery.conf.tpl"
+
+## Locale ##
+postgresql_locale: en_US.UTF8
+
+## state without clustering do not edit the line below ##
+postgresql_cluster_state: "std"
+postgresql_slave_sync: False
+postgresql_clustering: no

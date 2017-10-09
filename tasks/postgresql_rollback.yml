@@ -1,0 +1,6 @@
+---
+# task file for postgresql_rollback.yml
+
+- name: "No Rollback available"
+  debug:
+    msg="Rollback is not available for the moment, ask for it to the maintener if needed"

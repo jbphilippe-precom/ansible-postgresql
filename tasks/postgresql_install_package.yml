@@ -1,0 +1,23 @@
+---
+# task file for postgresql_install_package.yml
+
+- name: "Install PostgreSQL"
+  apt:
+    name=postgresql-{{ postgresql_version }}
+    update_cache=yes
+  environment:
+       LANG: "{{ postgresql_locale }}"
+       LANGUAGE: en_US
+       LC_CTYPE: "{{ postgresql_locale }}"
+       LC_NUMERIC: "{{ postgresql_locale }}"
+       LC_TIME: "{{ postgresql_locale }}"
+       LC_COLLATE: "{{ postgresql_locale }}"
+       LC_MONETARY: "{{ postgresql_locale }}"
+       LC_MESSAGES: "{{ postgresql_locale }}"
+       LC_PAPER: "{{ postgresql_locale }}"
+       LC_NAME: "{{ postgresql_locale }}"
+       LC_ADDRESS: "{{ postgresql_locale }}"
+       LC_TELEPHONE: "{{ postgresql_locale }}"
+       LC_MEASUREMENT: "{{ postgresql_locale }}"
+       LC_IDENTIFICATION: "{{ postgresql_locale }}"
+       LC_ALL: "{{ postgresql_locale }}"

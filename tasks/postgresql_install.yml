@@ -1,0 +1,23 @@
+---
+# task file for postgresql_install.yml
+
+- include: postgresql_install_fs.yml
+  become: yes
+  when: postgresql_lvcreate
+
+- include: postgresql_install_package.yml
+  become: yes
+
+- include: postgresql_install_configure.yml
+  become: yes
+
+- include: postgresql_install_secure.yml
+  become: yes
+
+- include: postgresql_clustering.yml
+  become: yes
+  when: postgresql_clustering
+
+- include: postgresql_slave_sync.yml
+  become: yes
+  when: postgresql_cluster_state == "s" and postgresql_clustering

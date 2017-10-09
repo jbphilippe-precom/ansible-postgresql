@@ -1,0 +1,22 @@
+---
+# task file for postgresql_install_fs.yml
+
+- name: "Create PostgreSQL LV"
+  lvol:
+    vg={{ postgresql_vg_name }}
+    lv={{ postgresql_lv_name }}
+    size={{ postgresql_lv_size }}
+    state=present
+
+- name: "Create ext4 filesystem for PostgreSQL on the LV"
+  filesystem:
+    fstype=ext4
+    dev=/dev/{{ postgresql_vg_name }}/{{ postgresql_lv_name }}
+
+- name: "Create mounpoint for LV"
+  mount:
+    name={{ postgresql_lv_dir }}
+    src=/dev/mapper/{{ postgresql_vg_name }}-{{ postgresql_lv_name }}
+    fstype=ext4
+    opts=defaults,noatime,noexec
+    state=mounted

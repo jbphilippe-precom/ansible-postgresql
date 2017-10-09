@@ -1,0 +1,56 @@
+---
+# tasks file for ansible-postgresql
+
+#
+# Non-defined mandatory variables for a cluster
+#
+- fail: msg="This play requires 'postgresql_wal_level'"
+  when: postgresql_wal_level is not defined and postgresql_clustering
+  tags: [installation]
+
+- fail: msg="This play requires 'postgresql_max_wal_senders'"
+  when: postgresql_max_wal_senders is not defined and postgresql_clustering
+  tags: [installation]
+
+- fail: msg="This play requires 'postgresql_hot_standby'"
+  when: postgresql_hot_standby is not defined and postgresql_clustering
+  tags: [installation]
+
+- fail: msg="This play requires 'postgresql_replication_user'"
+  when: postgresql_replication_user is not defined and postgresql_clustering
+  tags: [installation]
+
+- fail: msg="This play requires 'postgresql_replication_password'"
+  when: postgresql_replication_password is not defined and postgresql_clustering
+  tags: [installation]
+
+- fail: msg="This play requires 'postgresql_listen_addresses'"
+  when: postgresql_listen_addresses is not defined and postgresql_clustering
+  tags: [installation]
+
+- fail: msg="This play requires 'postgresql_master_host'"
+  when: postgresql_master_host is not defined and postgresql_clustering
+  tags: [installation]
+
+- fail: msg="This play requires 'postgresql_slaves_hosts'"
+  when: postgresql_slaves_hosts is not defined and postgresql_clustering
+  tags: [installation]
+
+#
+# tasks
+#
+
+## INSTALLATION ##
+- include: postgresql_install.yml
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+  tags: [installation]
+
+## ROLLBACK ##
+- include: postgresql_rollback.yml
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+  tags: [rollback]
+
+## TESTING ##
+- include: postgresql_testing.yml
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+  tags: [testing]

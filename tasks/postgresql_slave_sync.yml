@@ -1,0 +1,52 @@
+---
+- name: "Stop PostgreSQL Slave(s)"
+  service:
+    name="postgresql"
+    state=stopped
+  when: postgresql_slave_sync
+
+- name: "Removing old slave data"
+  file:
+    path="/var/lib/postgresql/{{ postgresql_version }}/main/"
+    state=absent
+  when: postgresql_slave_sync
+
+- name: "Write .pgpass for replication"
+  shell: "echo '*:*:*:{{ postgresql_replication_user }}:{{ postgresql_replication_password }}' > {{ postgresql_pgpass_path }}"
+
+- name: "Change permissions on .pgpass"
+  file:
+    path: "{{ postgresql_pgpass_path }}"
+    state: file
+    owner: "postgres"
+    group: "postgres"
+    mode: 0600
+
+- name: "Waiting for PostgreSQL Master listening"
+  wait_for:
+    host="{{ postgresql_master_host }}"
+    port="{{ postgresql_listen_port }}"
+    delay=5
+    timeout=42
+  when: postgresql_cluster_state == "s"
+
+
+- name: "Import data from master"
+  become_user: postgres
+  command: "pg_basebackup -x -h {{ postgresql_master_host }} -U {{ postgresql_replication_user }} -D /var/lib/postgresql/{{ postgresql_version }}/main"
+  when: postgresql_slave_sync
+  notify: Restart PostgreSQL
+
+- name: "Recovery.conf"
+  template:
+    src: "{{ postgresql_recovery_template }}"
+    dest: "/var/lib/postgresql/{{ postgresql_version }}/main/recovery.conf"
+    owner: "postgres"
+    group: "postgres"
+    mode: 0600
+  notify: Restart PostgreSQL
+
+- name: "Start PostgreSQL Slave(s)"
+  service:
+    name="postgresql"
+    state=started

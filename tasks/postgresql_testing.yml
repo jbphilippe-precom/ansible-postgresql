@@ -1,0 +1,8 @@
+---
+# task file for postgresql_testing.yml
+
+- name: Is PostgreSQL listening ?
+  wait_for:
+    port={{ postgresql_listen_port }}
+    delay=2
+    timeout=10

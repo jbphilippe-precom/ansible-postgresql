@@ -1,0 +1,5 @@
+---
+# vars file for ansible-postgresql
+postgresql_lv_dir: "/var/lib/postgresql"
+postgresql_main_configuration_file: "/etc/postgresql/9.3/main/postgresql.conf"
+postgresql_pgpass_path: "/var/lib/postgresql/.pgpass"
