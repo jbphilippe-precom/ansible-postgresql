@@ -7,7 +7,7 @@ galaxy_info:
   # next line and provide a value
   # issue_tracker_url: http://example.com/issue/tracker
   # Some suggested licenses:
-  # - BSD (default)
+  # - D (default)
   # - MIT
   # - GPLv2
   # - GPLv3
@@ -62,11 +62,11 @@ galaxy_info:
   #  - all
   #  - 2013.03
   #  - 2013.09
-  #- name: GenericBSD
+  #- name: GenericD
   #  versions:
   #  - all
   #  - any
-  #- name: FreeBSD
+  #- name: FreeD
   #  versions:
   #  - all
   #  - 8.0

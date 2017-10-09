@@ -114,12 +114,4 @@ Tags
     [rollback] : Go back to a previous PostgreSQL version ### DO NOTHING FOR THE MOMENT ###
     [testing] : Unit testing for a server
 
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-BSO ISL
+ 

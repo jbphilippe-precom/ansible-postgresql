@@ -454,7 +454,7 @@ log_timezone = 'localtime'
 
 
 #------------------------------------------------------------------------------
-# RUNTIME STATISTICS
+# RUNTIME STATTICS
 #------------------------------------------------------------------------------
 
 # - Query/Index Statistics Collector -
